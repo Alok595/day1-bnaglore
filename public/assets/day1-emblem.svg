@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 578 578" fill="none">
+  <!-- Outer circle (Off-white) -->
+  <circle cx="289" cy="289" r="270" stroke="#F8FAFC" stroke-width="4.5"/>
+  <!-- Inner circle (Luxury Gold) -->
+  <circle cx="289" cy="289" r="236" stroke="#D4AF37" stroke-width="3.5"/>
+  <!-- Letter D (Crisp off-white) -->
+  <path d="M 200 148 L 200 430 C 352 430 405 355 405 289 C 405 223 352 148 200 148 Z" 
+        stroke="#F8FAFC" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Numeral 1 (Luxury Gold) -->
+  <path d="M 292 292 L 332 254 L 332 438" 
+        stroke="#D4AF37" stroke-width="21" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
