@@ -273,9 +273,7 @@ export default function Home() {
                     <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight group-hover:text-[#00f0ff] transition-colors">
                       Sunil Shetty
                     </h3>
-                    <p className="text-sm sm:text-base font-semibold text-[#a855f7] mt-1">
-                      Building ZERO TO ONE BRAND • Enterprise &amp; Manufacturing Software
-                    </p>
+                   
                   </div>
 
                   <p className="text-white/70 text-sm sm:text-base leading-relaxed">
