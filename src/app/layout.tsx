@@ -57,6 +57,9 @@ export const metadata: Metadata = {
   },
 };
 
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import CustomCursor from "@/components/CustomCursor";
+
 export default function RootLayout({
   children,
 }: {
@@ -65,10 +68,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${dmSans.variable}`}>
       <body>
-        <div className="starfield" id="starfield" aria-hidden="true" />
-        <div className="bg-blob bg-blob--1" aria-hidden="true" />
-        <div className="bg-blob bg-blob--2" aria-hidden="true" />
-        {children}
+        <SmoothScrollProvider>
+          <CustomCursor />
+          <div className="starfield" id="starfield" aria-hidden="true" />
+          <div className="bg-blob bg-blob--1" aria-hidden="true" />
+          <div className="bg-blob bg-blob--2" aria-hidden="true" />
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );

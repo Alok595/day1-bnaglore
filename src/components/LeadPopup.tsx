@@ -101,7 +101,9 @@ export default function LeadPopup() {
 
   return (
     <div
-      className={`lead-popup-overlay ${isOpen ? "open" : ""}`}
+      className={`fixed inset-0 bg-[#0c0a1b]/80 backdrop-blur-md z-[500] flex items-center justify-center p-4 transition-all duration-400 ${
+        isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      }`}
       id="leadPopup"
       aria-hidden={!isOpen}
       onClick={(e) => {
@@ -111,14 +113,16 @@ export default function LeadPopup() {
       }}
     >
       <div
-        className="lead-popup"
+        className={`relative w-full max-w-[28rem] bg-[#14134d]/90 backdrop-blur-lg rounded-2xl p-8 shadow-[0_1rem_3rem_rgba(0,6,102,0.6)] border border-[#fcfeea]/10 flex flex-col gap-5 transition-transform duration-400 ${
+          isOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
+        }`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="leadPopupTitle"
       >
         <button
           type="button"
-          className="lead-popup-close"
+          className="absolute top-4 right-4 bg-transparent border-none text-[#fcfeea]/50 cursor-pointer p-2 transition-colors duration-300 hover:text-[#00f0ff]"
           id="leadPopupClose"
           aria-label="Close"
           onClick={handleClose}
@@ -139,29 +143,30 @@ export default function LeadPopup() {
           </svg>
         </button>
 
-        <span className="lead-popup-badge">🎁 Free SEO Audit</span>
-        <h3 id="leadPopupTitle" className="lead-popup-title">
+        <span className="inline-flex self-start px-2.5 py-1 rounded-full bg-[#00f0ff]/10 text-[#00f0ff] font-[family-name:var(--font-heading)] text-[0.65rem] font-bold uppercase tracking-wider">🎁 Free SEO Audit</span>
+        <h3 id="leadPopupTitle" className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#fcfeea] leading-tight m-0">
           Get a Free SEO &amp; Website Audit
         </h3>
-        <p className="lead-popup-sub">
+        <p className="text-[#a7a8cf] text-sm leading-relaxed m-0">
           We&apos;ll check your site&apos;s speed, keywords, and growth gaps &mdash; no
           cost, no commitment.
         </p>
 
         {!isSubmitted ? (
           <form
-            className="lead-popup-form"
+            className="flex flex-col gap-4 mt-2"
             id="leadPopupForm"
             onSubmit={handleSubmit}
           >
-            <div className="lead-popup-row">
-              <div className="lead-popup-field">
-                <label htmlFor="leadFirstName">First Name *</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="leadFirstName" className="text-[#a7a8cf] text-[0.7rem] font-bold uppercase tracking-wider">First Name *</label>
                 <input
                   type="text"
                   id="leadFirstName"
                   name="first_name"
                   placeholder="e.g. Rahul"
+                  className="w-full h-11 px-4 rounded-xl bg-[#0c0a1b]/50 border border-[#fcfeea]/10 text-[#fcfeea] text-sm transition-all duration-300 outline-none focus:border-[#00f0ff]/50 focus:bg-[#0c0a1b]"
                   required
                   autoComplete="given-name"
                   value={formData.firstName}
@@ -170,13 +175,14 @@ export default function LeadPopup() {
                   }
                 />
               </div>
-              <div className="lead-popup-field">
-                <label htmlFor="leadLastName">Last Name *</label>
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="leadLastName" className="text-[#a7a8cf] text-[0.7rem] font-bold uppercase tracking-wider">Last Name *</label>
                 <input
                   type="text"
                   id="leadLastName"
                   name="last_name"
                   placeholder="e.g. Sharma"
+                  className="w-full h-11 px-4 rounded-xl bg-[#0c0a1b]/50 border border-[#fcfeea]/10 text-[#fcfeea] text-sm transition-all duration-300 outline-none focus:border-[#00f0ff]/50 focus:bg-[#0c0a1b]"
                   required
                   autoComplete="family-name"
                   value={formData.lastName}
@@ -186,13 +192,14 @@ export default function LeadPopup() {
                 />
               </div>
             </div>
-            <div className="lead-popup-field">
-              <label htmlFor="leadPhone">Phone Number *</label>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="leadPhone" className="text-[#a7a8cf] text-[0.7rem] font-bold uppercase tracking-wider">Phone Number *</label>
               <input
                 type="tel"
                 id="leadPhone"
                 name="phone"
                 placeholder="+91 98765 43210"
+                className="w-full h-11 px-4 rounded-xl bg-[#0c0a1b]/50 border border-[#fcfeea]/10 text-[#fcfeea] text-sm transition-all duration-300 outline-none focus:border-[#00f0ff]/50 focus:bg-[#0c0a1b]"
                 required
                 autoComplete="tel"
                 value={formData.phone}
@@ -201,13 +208,14 @@ export default function LeadPopup() {
                 }
               />
             </div>
-            <div className="lead-popup-field">
-              <label htmlFor="leadEmail">Email *</label>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="leadEmail" className="text-[#a7a8cf] text-[0.7rem] font-bold uppercase tracking-wider">Email *</label>
               <input
                 type="email"
                 id="leadEmail"
                 name="email"
                 placeholder="you@company.com"
+                className="w-full h-11 px-4 rounded-xl bg-[#0c0a1b]/50 border border-[#fcfeea]/10 text-[#fcfeea] text-sm transition-all duration-300 outline-none focus:border-[#00f0ff]/50 focus:bg-[#0c0a1b]"
                 required
                 autoComplete="email"
                 value={formData.email}
@@ -218,20 +226,20 @@ export default function LeadPopup() {
             </div>
             <button
               type="submit"
-              className="lead-popup-submit"
+              className="w-full h-12 rounded-xl bg-[#1868e8] text-[#fcfeea] font-[family-name:var(--font-sans)] text-sm font-bold uppercase tracking-wider cursor-pointer border-none mt-2 transition-all duration-300 hover:bg-[#1868e8]/90 hover:shadow-[0_0_1rem_rgba(24,104,232,0.4)] disabled:opacity-70 disabled:cursor-not-allowed"
               id="leadPopupSubmit"
               disabled={isSending}
             >
               {isSending ? "Sending…" : "Claim My Free Audit"}
             </button>
             {errorMessage && (
-              <p className="lead-popup-note" id="leadPopupNote">
+              <p className="text-[#00f0ff] text-xs text-center m-0 mt-2" id="leadPopupNote">
                 {errorMessage}
               </p>
             )}
           </form>
         ) : (
-          <div className="lead-popup-success show" id="leadPopupSuccess">
+          <div className="flex flex-col items-center justify-center text-center gap-4 py-8 animate-in fade-in duration-500" id="leadPopupSuccess">
             <svg
               width="40"
               height="40"
@@ -248,8 +256,8 @@ export default function LeadPopup() {
                 strokeLinejoin="round"
               />
             </svg>
-            <h3>Thanks — you&apos;re in!</h3>
-            <p>Our team will reach out with your free audit shortly.</p>
+            <h3 className="font-[family-name:var(--font-heading)] text-xl font-bold text-[#fcfeea] mt-2">Thanks — you&apos;re in!</h3>
+            <p className="text-[#a7a8cf] text-sm leading-relaxed">Our team will reach out with your free audit shortly.</p>
           </div>
         )}
       </div>

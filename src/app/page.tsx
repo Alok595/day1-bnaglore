@@ -1,345 +1,38 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import ContactModal from "@/components/ContactModal";
 import LeadPopup from "@/components/LeadPopup";
 import FloatActions from "@/components/FloatActions";
 import ChatAssistant from "@/components/ChatAssistant";
+import Magnetic from "@/components/Magnetic";
+import PremiumServiceCard from "@/components/PremiumServiceCard";
+import PremiumWorkShowcase from "@/components/PremiumWorkShowcase";
+import Hero from "@/components/Hero";
 
-const SCREENS = [
-  { id: "hero", weight: 1.1 },
-  { id: "services", weight: 1.0 },
-  { id: "work", weight: 1.7 },
-  { id: "vision", weight: 1.1 },
-  { id: "team", weight: 1.8 },
-  { id: "contact", weight: 1.0 },
-];
+const fadeInUp: any = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
 
-const WORK_PROJECTS = [
-  { no: "01", name: "Classic Tuff", url: "https://classictuff.in/" },
-  { no: "02", name: "Aadhi Yoga", url: "https://aadhiyoga.in/" },
-  { no: "03", name: "Ikigyan", url: "https://ikigyan.com/" },
-  { no: "04", name: "Alfatech", url: "https://myalfatech.com/" },
-  { no: "05", name: "Pebble Grey", url: "https://pebblegrey.in/" },
-  { no: "06", name: "ZMZ Events", url: "https://zmzevents.com" },
-  { no: "07", name: "Zenaum", url: "http://zenaum.in/" },
-  { no: "08", name: "NE Native", url: "https://neinative.com/" },
-  { no: "09", name: "Tyohar Mart", url: "https://tyoharmart.com/" },
-  { no: "10", name: "Golden Eventz", url: "https://www.goldeneventz.co.in/" },
-  { no: "11", name: "Elite Property DXB", url: "https://elitepropertydxb.com/" },
-  { no: "12", name: "The Capital Constructions", url: "https://thecapitalconstructions.com/" },
-  { no: "13", name: "Homeland", url: "https://www.homeland.ae/" },
-  { no: "14", name: "Inland Indoors", url: "https://www.inlandindoors.com/" },
-  { no: "15", name: "RCIS", url: "https://rcis.in/" },
-];
+const staggerContainer: any = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 }
+  }
+};
 
 export default function Home() {
   const [contactOpen, setContactOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  const orbRef = useRef<HTMLDivElement>(null);
-  const orbScaleRef = useRef<HTMLDivElement>(null);
-  const heroInnerRef = useRef<HTMLDivElement>(null);
-  const standardListRef = useRef<HTMLUListElement>(null);
-
-  const scrollTargetRef = useRef(0);
-  const scrollCurrentRef = useRef(0);
-  const isDesktopRef = useRef(false);
-
-  // Navigate on desktop virtual-scroll engine or mobile native scroll
-  const goToSection = useCallback((id: string) => {
-    if (isDesktopRef.current) {
-      const idx = SCREENS.findIndex((s) => s.id === id);
-      if (idx === -1) return;
-      const vh = window.innerHeight;
-      const unit = vh * 1.4;
-      let acc = 0;
-      for (let i = 0; i < idx; i++) {
-        acc += SCREENS[i].weight * unit;
-      }
-      const rangeLen = SCREENS[idx].weight * unit;
-      const landing = acc + rangeLen * 0.32;
-      scrollTargetRef.current = landing;
-    } else {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
-
-  useEffect(() => {
-    const checkDesktop = () => window.matchMedia("(min-width: 800px)").matches;
-    isDesktopRef.current = checkDesktop();
-
-    if (!isDesktopRef.current) {
-      // Mobile native reveal logic
-      document.querySelectorAll(".screen").forEach((s) => s.classList.add("is-active"));
-      let revealEls = Array.from(
-        document.querySelectorAll(
-          ".hl, .fade-block, .standard-item, .work-row, .team-card, .service-card"
-        )
-      );
-
-      const revealVisible = () => {
-        if (!revealEls.length) return;
-        const vh = window.innerHeight;
-        revealEls = revealEls.filter((el) => {
-          const r = el.getBoundingClientRect();
-          if (r.top < vh * 0.94 && r.bottom > 0) {
-            el.classList.add("in-view");
-            return false;
-          }
-          return true;
-        });
-      };
-
-      window.addEventListener("scroll", revealVisible, { passive: true });
-      window.addEventListener("resize", revealVisible);
-      const poll = setInterval(revealVisible, 800);
-      revealVisible();
-
-      return () => {
-        window.removeEventListener("scroll", revealVisible);
-        window.removeEventListener("resize", revealVisible);
-        clearInterval(poll);
-      };
-    }
-
-    // Desktop Engine Setup
-    let vh = window.innerHeight;
-    let unit = vh * 1.4;
-    let ranges: [number, number][] = [];
-
-    const buildRanges = () => {
-      let acc = 0;
-      ranges = SCREENS.map((s) => {
-        const start = acc;
-        const end = acc + s.weight * unit;
-        acc = end;
-        return [start, end];
-      });
-    };
-    buildRanges();
-    let maxScroll = ranges[ranges.length - 1][1];
-
-    const clamp = (v: number, min: number, max: number) =>
-      Math.max(min, Math.min(max, v));
-
-    const findScrollableAncestor = (
-      node: HTMLElement | null,
-      dir: number
-    ): HTMLElement | null => {
-      while (node && node !== document.body && node !== document.documentElement) {
-        if (node.nodeType === 1) {
-          const style = window.getComputedStyle(node);
-          const canScrollY =
-            (style.overflowY === "auto" || style.overflowY === "scroll") &&
-            node.scrollHeight > node.clientHeight;
-          if (canScrollY) {
-            const hasRoom =
-              dir > 0
-                ? node.scrollTop < node.scrollHeight - node.clientHeight - 1
-                : dir < 0
-                ? node.scrollTop > 1
-                : true;
-            if (hasRoom) return node;
-          }
-        }
-        node = node.parentElement;
-      }
-      return null;
-    };
-
-    const handleWheel = (e: WheelEvent) => {
-      if (findScrollableAncestor(e.target as HTMLElement, e.deltaY)) return;
-      e.preventDefault();
-      const raw = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
-      const d = clamp(raw, -100, 100);
-      scrollTargetRef.current = clamp(scrollTargetRef.current + d, 0, maxScroll);
-    };
-
-    let touchStartY: number | null = null;
-    let touchLastY: number | null = null;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-      touchLastY = touchStartY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (touchStartY === null || touchLastY === null) return;
-      const y = e.touches[0].clientY;
-      const dy = touchLastY - y;
-      touchLastY = y;
-      if (findScrollableAncestor(e.target as HTMLElement, dy)) return;
-      scrollTargetRef.current = clamp(
-        scrollTargetRef.current + dy * 2.2,
-        0,
-        maxScroll
-      );
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (["ArrowDown", "PageDown"].includes(e.key)) {
-        scrollTargetRef.current = clamp(
-          scrollTargetRef.current + vh * 0.8,
-          0,
-          maxScroll
-        );
-      } else if (["ArrowUp", "PageUp"].includes(e.key)) {
-        scrollTargetRef.current = clamp(
-          scrollTargetRef.current - vh * 0.8,
-          0,
-          maxScroll
-        );
-      }
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!orbRef.current) return;
-      const nx = e.clientX / window.innerWidth - 0.5;
-      const ny = e.clientY / window.innerHeight - 0.5;
-      orbRef.current.style.transform = `rotateY(${nx * 14}deg) rotateX(${
-        -ny * 14
-      }deg) scale(1.02)`;
-    };
-
-    const handleMouseLeave = () => {
-      if (orbRef.current) orbRef.current.style.transform = "";
-    };
-
-    const handleResize = () => {
-      isDesktopRef.current = checkDesktop();
-      vh = window.innerHeight;
-      unit = vh * 1.4;
-      buildRanges();
-      maxScroll = ranges[ranges.length - 1][1];
-    };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("touchstart", handleTouchStart, { passive: true });
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
-    window.addEventListener("resize", handleResize);
-
-    // Frame animation loop
-    let lastTime: number | null = null;
-    let animId: number;
-
-    const screenElements = SCREENS.map((s) => document.getElementById(s.id));
-    const standardItems = standardListRef.current
-      ? Array.from(standardListRef.current.querySelectorAll(".standard-item"))
-      : [];
-
-    const render = (now: number) => {
-      if (!isDesktopRef.current) return;
-
-      const dt = lastTime == null ? 16.67 : Math.min(now - lastTime, 48);
-      lastTime = now;
-      const ease = 1 - Math.pow(1 - 0.16, dt / 16.67);
-
-      scrollCurrentRef.current +=
-        (scrollTargetRef.current - scrollCurrentRef.current) * ease;
-      if (Math.abs(scrollTargetRef.current - scrollCurrentRef.current) < 0.05) {
-        scrollCurrentRef.current = scrollTargetRef.current;
-      }
-
-      const cur = scrollCurrentRef.current;
-      let newActive = 0;
-      let bestOpacity = -1;
-
-      screenElements.forEach((screen, i) => {
-        if (!screen) return;
-        const range = ranges[i];
-        if (!range) return;
-        const s = range[0],
-          e = range[1],
-          L = e - s;
-        const fadeFrac = i === 0 ? 0.68 : i === 1 ? 0.45 : 0.22;
-        const fadeLen = L * fadeFrac;
-        const isLast = i === SCREENS.length - 1;
-
-        let op: number;
-        if (cur <= s - fadeLen || (!isLast && cur >= e)) {
-          op = 0;
-        } else if (cur <= s) {
-          op = (cur - (s - fadeLen)) / fadeLen;
-        } else if (isLast || cur < e - fadeLen) {
-          op = 1;
-        } else {
-          op = (e - cur) / fadeLen;
-        }
-        op = clamp(op, 0, 1);
-
-        screen.style.opacity = op.toString();
-        screen.style.transform = `translateY(${(1 - op) * 18}px)`;
-
-        if (op > 0.5 && !screen.classList.contains("is-active")) {
-          screen.classList.add("is-active");
-        } else if (op <= 0.5 && screen.classList.contains("is-active")) {
-          screen.classList.remove("is-active");
-        }
-
-        if (op > bestOpacity) {
-          bestOpacity = op;
-          newActive = i;
-        }
-      });
-
-      setActiveIndex(newActive);
-
-      // Hero orb zoom
-      if (orbScaleRef.current && ranges[0]) {
-        const heroL = ranges[0][1] - ranges[0][0];
-        const heroP = clamp(cur / heroL, 0, 1);
-        const zoomP = clamp(heroP / 0.32, 0, 1);
-        const scale = 1 + Math.pow(zoomP, 1.6) * 9;
-        orbScaleRef.current.style.transform = `scale(${scale})`;
-
-        const textOp = 1 - clamp(zoomP / 0.55, 0, 1);
-        if (heroInnerRef.current) {
-          heroInnerRef.current.style.opacity = textOp.toString();
-        }
-      }
-
-      // Standard items reveal in Vision
-      if (standardItems.length && ranges[3]) {
-        const vsRange = ranges[3];
-        const vsL = vsRange[1] - vsRange[0];
-        const vsLocal = clamp((cur - vsRange[0]) / vsL, 0, 1);
-        const introFrac = 0.02;
-        const listEnd = 0.24;
-        const segLen = (listEnd - introFrac) / standardItems.length;
-
-        standardItems.forEach((item, idx) => {
-          const segStart = introFrac + idx * segLen;
-          const p = clamp((vsLocal - segStart) / segLen, 0, 1);
-          const eased = 1 - Math.pow(1 - p, 3);
-          const el = item as HTMLElement;
-          el.style.opacity = eased.toString();
-          el.style.transform = `translateY(${(1 - eased) * 16}px)`;
-        });
-      }
-
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
+  const goToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
@@ -348,587 +41,339 @@ export default function Home() {
         onNavigate={goToSection}
       />
 
-      <div className="frame" id="frame">
+      <div className="relative w-full overflow-hidden" id="frame">
         {/* SCREEN 1: HERO */}
-        <section
-          className="screen screen--hero is-active"
-          data-screen
-          data-weight="1.1"
-          id="hero"
-        >
-          <div className="ambient-bubble ambient-bubble--1" />
-          <div className="ambient-bubble ambient-bubble--2" />
-          <div className="ambient-bubble ambient-bubble--3" />
-
-          <div className="orb-scale" id="orbScale" ref={orbScaleRef}>
-            <div className="orb-wrap" id="orbWrap">
-              <div className="orb" id="orb" ref={orbRef} />
-            </div>
-          </div>
-
-          <div className="screen-inner" ref={heroInnerRef}>
-            <h1 className="ts-1 split-lines">
-              <span className="hl">
-                Design that <i>performs</i>.
-              </span>
-              <span className="hl">
-                Software that <i>scales</i>.
-              </span>
-              <span className="hl">
-                Marketing that <i>compounds</i>.
-              </span>
-            </h1>
-            <div className="hero-buttons fade-block">
-              <button
-                type="button"
-                className="btn btn--cream btn--md"
-                onClick={() => setContactOpen(true)}
-              >
-                <span>Get a Free Consultation</span>
-              </button>
-              <button
-                type="button"
-                className="btn btn--outlined btn--md"
-                onClick={() => goToSection("work")}
-              >
-                <span>View Our Work</span>
-              </button>
-            </div>
-            <p className="ts-p hero-copy fade-block">
-              Day One is the single team behind your website, your software
-              and your growth marketing. One studio, one point of
-              accountability,{" "}
-              <span className="hero-copy-strong">results you can measure.</span>
-            </p>
-          </div>
-        </section>
+        <Hero
+          onPrimaryCta={() => setContactOpen(true)}
+          onSecondaryCta={() => goToSection("work")}
+        />
 
         {/* SCREEN 2: SERVICES */}
-        <section
-          className="screen screen--services"
-          data-screen
-          data-weight="1"
-          id="services"
-        >
-          <div className="screen-inner services-layout-v2">
-            <div className="services-heading-row">
-              <h2 className="discipline-heading split-lines">
-                <span className="hl">
-                  Six disciplines. One team that owns the <i>result</i>.
-                </span>
+        <section className="relative w-full min-h-screen py-32 flex items-center justify-center overflow-hidden" id="services">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            variants={staggerContainer}
+            className="relative z-10 w-full max-w-[80rem] px-4 sm:px-12 mx-auto"
+          >
+            <motion.div className="text-center mb-16" variants={fadeInUp}>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">
+                Six disciplines. One team that owns the <i className="text-white/70">result</i>.
               </h2>
-              <p className="ts-p-sm discipline-intro fade-block">
+              <p className="text-lg text-white/60 max-w-2xl mx-auto">
                 No handoffs between agencies — the same people design, ship, rank
                 and market it.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="services-grid" id="stackWrap">
-              <article className="service-card fade-block">
-                <div className="service-card-top">
-                  <span className="stack-tag">Design</span>
-                </div>
-                <h3 className="service-title">Web Design &amp; Development</h3>
-                <p className="service-desc">
-                  Websites engineered to load fast, look sharp on every device
-                  and turn visitors into paying customers.
-                </p>
-                <button
-                  type="button"
-                  className="service-more"
-                  onClick={() => setContactOpen(true)}
-                >
-                  Know more →
-                </button>
-                <div className="service-media">
-                  <Image
-                    src="/assets/website.webp"
-                    alt="Web design and development"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                    loading="lazy"
-                  />
-                </div>
-              </article>
-
-              <article className="service-card fade-block">
-                <div className="service-card-top">
-                  <span className="stack-tag">Engineering</span>
-                </div>
-                <h3 className="service-title">
-                  Solution-Based Premium Software
-                </h3>
-                <p className="service-desc">
-                  Custom software built around how your business actually
-                  works, not the other way around.
-                </p>
-                <button
-                  type="button"
-                  className="service-more"
-                  onClick={() => setContactOpen(true)}
-                >
-                  Know more →
-                </button>
-                <div className="service-media">
-                  <Image
-                    src="/assets/sotware.webp"
-                    alt="Solution-based software"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                    loading="lazy"
-                  />
-                </div>
-              </article>
-
-              <article className="service-card fade-block">
-                <div className="service-card-top">
-                  <span className="stack-tag">Visibility</span>
-                </div>
-                <h3 className="service-title">SEO</h3>
-                <p className="service-desc">
-                  Get found by the customers who are already searching for
-                  exactly what you offer.
-                </p>
-                <button
-                  type="button"
-                  className="service-more"
-                  onClick={() => setContactOpen(true)}
-                >
-                  Know more →
-                </button>
-                <div className="service-media">
-                  <Image
-                    src="/assets/sep.webp"
-                    alt="SEO"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                    loading="lazy"
-                  />
-                </div>
-              </article>
-
-              <article className="service-card fade-block">
-                <div className="service-card-top">
-                  <span className="stack-tag">Growth</span>
-                </div>
-                <h3 className="service-title">Performance Marketing</h3>
-                <p className="service-desc">
-                  Campaigns built to hit revenue targets, measured by ROI and not
-                  by impressions.
-                </p>
-                <button
-                  type="button"
-                  className="service-more"
-                  onClick={() => setContactOpen(true)}
-                >
-                  Know more →
-                </button>
-                <div className="service-media">
-                  <Image
-                    src="/assets/performance marketing.webp"
-                    alt="Performance marketing"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                    loading="lazy"
-                  />
-                </div>
-              </article>
-
-              <article className="service-card fade-block">
-                <div className="service-card-top">
-                  <span className="stack-tag">Automation</span>
-                </div>
-                <h3 className="service-title">AI Chatbot</h3>
-                <p className="service-desc">
-                  Custom-trained chat assistants that answer FAQs instantly and
-                  capture leads around the clock — like the one on this site.
-                </p>
-                <button
-                  type="button"
-                  className="service-more"
-                  onClick={() => setContactOpen(true)}
-                >
-                  Know more →
-                </button>
-                <div className="service-media" />
-              </article>
-
-              <article className="service-card fade-block">
-                <div className="service-card-top">
-                  <span className="stack-tag">Mobile</span>
-                </div>
-                <h3 className="service-title">App Development</h3>
-                <p className="service-desc">
-                  Native and cross-platform apps built to the same standard as
-                  everything else we ship — fast, reliable, built to scale.
-                </p>
-                <button
-                  type="button"
-                  className="service-more"
-                  onClick={() => setContactOpen(true)}
-                >
-                  Know more →
-                </button>
-                <div className="service-media" />
-              </article>
-            </div>
-          </div>
+            <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full">
+              <PremiumServiceCard
+                index={0}
+                tag="Design"
+                title="Web Design & Development"
+                desc="Websites engineered to load fast, look sharp on every device and turn visitors into paying customers."
+                imageSrc="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop"
+                deliverables={["Next.js 15", "Conversion UI", "WebGL Motion"]}
+                metrics="Sub-1s Load Time"
+                accentColor="#00f0ff"
+                onKnowMore={() => setContactOpen(true)}
+              />
+              <PremiumServiceCard
+                index={1}
+                tag="Engineering"
+                title="Solution-Based Premium Software"
+                desc="Custom software built around how your business actually works, not the other way around."
+                imageSrc="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop"
+                deliverables={["Custom CRM", "SaaS Platforms", "Workflow Automation"]}
+                metrics="100% Bespoke Tech"
+                accentColor="#a855f7"
+                onKnowMore={() => setContactOpen(true)}
+              />
+              <PremiumServiceCard
+                index={2}
+                tag="Visibility"
+                title="SEO & Organic Growth"
+                desc="Get found by the customers who are already searching for exactly what you offer."
+                imageSrc="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
+                deliverables={["Technical SEO", "High-Intent Search", "Core Web Vitals"]}
+                metrics="Top 3 Google Rank"
+                accentColor="#10b981"
+                onKnowMore={() => setContactOpen(true)}
+              />
+              <PremiumServiceCard
+                index={3}
+                tag="Growth"
+                title="Performance Marketing"
+                desc="Campaigns built to hit revenue targets, measured by ROI and not by vanity impressions."
+                imageSrc="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
+                deliverables={["Meta & Google Ads", "Funnel CRO", "Revenue Attribution"]}
+                metrics="4.8x Avg ROAS"
+                accentColor="#f43f5e"
+                onKnowMore={() => setContactOpen(true)}
+              />
+              <PremiumServiceCard
+                index={4}
+                tag="Automation"
+                title="AI Chatbot & Concierge"
+                desc="Custom-trained chat assistants that answer FAQs instantly and capture leads around the clock."
+                imageSrc="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop"
+                deliverables={["On-Site AI Bot", "Zero Latency", "FAQ Intelligence"]}
+                metrics="24/7 Lead Capture"
+                accentColor="#38bdf8"
+                onKnowMore={() => setContactOpen(true)}
+              />
+              <PremiumServiceCard
+                index={5}
+                tag="Mobile"
+                title="App Development"
+                desc="Native and cross-platform apps built to the same standard as everything else we ship — fast, reliable, built to scale."
+                imageSrc="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop"
+                deliverables={["React Native", "Native Speed", "Cloud Backend"]}
+                metrics="iOS & Android"
+                accentColor="#ec4899"
+                onKnowMore={() => setContactOpen(true)}
+              />
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* SCREEN 3: WORK */}
-        <section
-          className="screen screen--work"
-          data-screen
-          data-weight="1.7"
-          id="work"
-        >
-          <div className="screen-inner work-inner">
-            <div className="work-heading fade-block">
-              <span className="ts-eyebrown">Selected Work</span>
-              <h2 className="work-title">
-                Real businesses, <i>real results</i>.
+        <section className="py-24 sm:py-36 relative" id="work">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            variants={staggerContainer}
+            className="w-full max-w-7xl mx-auto px-4 sm:px-8"
+          >
+            <motion.div className="text-center mb-16 sm:mb-20" variants={fadeInUp}>
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[#00f0ff] block mb-4">
+                Selected Work
+              </span>
+              <h2 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-4">
+                Real businesses, <i className="text-white/70">real results</i>.
               </h2>
-            </div>
+              <p className="text-lg sm:text-xl font-medium text-white/90 mb-2">
+                Fifteen engagements, one standard.
+              </p>
+              <p className="text-sm sm:text-base text-white/60 max-w-xl mx-auto">
+                Every project below is live in production, built and shipped.
+              </p>
+            </motion.div>
 
-            <div className="work-list">
-              {WORK_PROJECTS.map((project) => (
-                <a
-                  key={project.no}
-                  className="work-row fade-block"
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="work-row-no">{project.no}</span>
-                  <span className="work-row-name">{project.name}</span>
-                  <svg
-                    className="work-row-arrow"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 4L12 12M12 12V5M12 12H5"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </a>
-              ))}
-            </div>
-          </div>
+            <motion.div variants={fadeInUp} className="w-full relative z-10 pt-4">
+              <PremiumWorkShowcase />
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* SCREEN 4: VISION */}
-        <section
-          className="screen screen--vision"
-          data-screen
-          data-weight="1.1"
-          id="vision"
-        >
-          <div className="screen-inner split">
-            <div className="vision-main">
-              <span className="ts-eyebrown fade-block">The Studio Standard</span>
-              <h2 className="ts-1 ts-1--left split-lines">
-                <span className="hl">Built for</span>
-                <span className="hl">businesses tired</span>
-                <span className="hl">of managing</span>
-                <span className="hl">
-                  <i>five vendors</i>.
-                </span>
+        <section className="relative w-full min-h-screen py-32 flex items-center justify-center overflow-hidden" id="vision">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            variants={staggerContainer}
+            className="relative z-10 w-full max-w-[80rem] px-4 sm:px-12 mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24"
+          >
+            <motion.div className="lg:w-1/2" variants={fadeInUp}>
+              <span className="text-sm font-bold uppercase tracking-[0.2em] text-white/50 block mb-6">The Studio Standard</span>
+              <h2 className="text-4xl md:text-6xl font-extrabold leading-tight mb-8">
+                Built for businesses tired of managing <i className="text-white/70">five vendors</i>.
               </h2>
-              <p className="ts-p-sm fade-block">
+              <p className="text-xl text-white/60 leading-relaxed max-w-md">
                 Every engagement is designed around outcomes you can measure,
                 not deliverables you can only screenshot.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="vision-side">
-              <ul className="standard-list" ref={standardListRef}>
-                <li className="standard-item">
-                  <span className="standard-no">01</span>
-                  <div>
-                    <h4 className="standard-title">Full-stack delivery</h4>
-                    <p className="standard-desc">
-                      One team designs, builds, ranks and markets your product,
-                      start to finish.
-                    </p>
-                  </div>
-                </li>
-                <li className="standard-item">
-                  <span className="standard-no">02</span>
-                  <div>
-                    <h4 className="standard-title">Proven results</h4>
-                    <p className="standard-desc">
-                      ₹3 Cr+ in revenue generated for clients through our
-                      engagements to date.
-                    </p>
-                  </div>
-                </li>
-                <li className="standard-item">
-                  <span className="standard-no">03</span>
-                  <div>
-                    <h4 className="standard-title">
-                      A dedicated point of contact
-                    </h4>
-                    <p className="standard-desc">
-                      You always know exactly who owns your project.
-                    </p>
-                  </div>
-                </li>
-                <li className="standard-item">
-                  <span className="standard-no">04</span>
-                  <div>
-                    <h4 className="standard-title">Built for growth</h4>
-                    <p className="standard-desc">
-                      Every solution is engineered to scale as your business
-                      does.
-                    </p>
-                  </div>
-                </li>
-                <li className="standard-item">
-                  <span className="standard-no">05</span>
-                  <div>
-                    <h4 className="standard-title">
-                      Honest timelines and pricing
-                    </h4>
-                    <p className="standard-desc">
-                      No hidden costs and no scope surprises, guaranteed.
-                    </p>
-                  </div>
-                </li>
-              </ul>
+            <motion.div className="lg:w-1/2 flex flex-col gap-8" variants={fadeInUp}>
+              <div className="flex gap-6 items-start">
+                <span className="text-3xl font-bold text-white/20">01</span>
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-2">Full-stack delivery</h4>
+                  <p className="text-white/60">One team designs, builds, ranks and markets your product, start to finish.</p>
+                </div>
+              </div>
+              <div className="flex gap-6 items-start">
+                <span className="text-3xl font-bold text-white/20">02</span>
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-2">Proven results</h4>
+                  <p className="text-white/60">₹3 Cr+ in revenue generated for clients through our engagements to date.</p>
+                </div>
+              </div>
+              <div className="flex gap-6 items-start">
+                <span className="text-3xl font-bold text-white/20">03</span>
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-2">Honest timelines and pricing</h4>
+                  <p className="text-white/60">No hidden costs and no scope surprises, guaranteed.</p>
+                </div>
+              </div>
+              
               <button
                 type="button"
-                className="btn btn--outlined btn--md fade-block start-project-btn"
+                className="mt-8 self-start px-8 py-4 rounded-full border border-white/20 text-white font-medium hover:bg-white hover:text-black transition-colors"
                 onClick={() => setContactOpen(true)}
               >
                 Start Your Project
               </button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </section>
 
         {/* SCREEN 5: TEAM */}
-        <section
-          className="screen screen--team"
-          data-screen
-          data-weight="1.8"
-          id="team"
-        >
-          <div className="screen-inner">
-            <span className="ts-eyebrown team-eyebrow fade-block">Leadership</span>
-            <h2 className="discipline-heading fade-block">
-              The team behind the work.
-            </h2>
+        <section className="relative w-full py-32 flex items-center justify-center overflow-hidden" id="team">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            variants={staggerContainer}
+            className="relative z-10 w-full max-w-5xl px-4 sm:px-8 mx-auto text-center"
+          >
+            <motion.span variants={fadeInUp} className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[#00f0ff] block mb-4">
+              Leadership
+            </motion.span>
+            <motion.h2 variants={fadeInUp} className="text-4xl md:text-5xl font-extrabold mb-14 text-white tracking-tight">
+              The mind behind <i className="text-white/70">the craft</i>.
+            </motion.h2>
 
-            <div className="team-grid !grid-cols-2 !max-w-2xl mx-auto">
+            <motion.div variants={fadeInUp} className="w-full">
               <div
-                className="team-card fade-block"
+                className="group relative rounded-3xl sm:rounded-[2.5rem] bg-gradient-to-b from-[#14132b]/80 via-[#0e0d22]/90 to-[#0c0a1b]/95 border border-white/10 backdrop-blur-2xl p-6 sm:p-10 shadow-2xl overflow-hidden text-left flex flex-col md:flex-row gap-8 lg:gap-12 items-center cursor-pointer transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_40px_rgba(0,240,255,0.15)]"
                 onClick={() => setContactOpen(true)}
               >
-                <div className="team-photo-wrap">
+                {/* Ambient glow */}
+                <div className="absolute top-0 right-0 w-80 h-80 bg-[#7672ff]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#00f0ff]/5 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Founder Photo */}
+                <div className="w-full md:w-72 sm:w-80 aspect-[4/5] relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/15 shrink-0 shadow-lg">
                   <Image
-                    src="/assets/alex-morgan.jpg"
-                    alt="Alex Morgan"
-                    width={400}
-                    height={400}
-                    className="team-photo"
+                    src="/assets/1772094173539.jpg"
+                    alt="Sunil Shetty"
+                    fill
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a1b]/80 via-transparent to-transparent" />
                 </div>
-                <div className="team-card-overlay">
-                  <span className="team-role">Founder &amp; Engineering Lead</span>
-                  <h3 className="team-name">Alex Morgan</h3>
-                  <p className="team-bio">
-                    Directs product architecture, custom software development,
-                    and technical strategy for all client engagements.
+
+                {/* Founder Bio & Expertise */}
+                <div className="flex flex-col gap-4 flex-1">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00f0ff] bg-[#00f0ff]/10 border border-[#00f0ff]/30 px-3.5 py-1 rounded-full">
+                      Founder &amp; Systems Architect
+                    </span>
+                    <span className="text-xs font-sans text-white/50 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
+                      He/Him
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight group-hover:text-[#00f0ff] transition-colors">
+                      Sunil Shetty
+                    </h3>
+                    <p className="text-sm sm:text-base font-semibold text-[#a855f7] mt-1">
+                      Building ZERO TO ONE BRAND • Enterprise &amp; Manufacturing Software
+                    </p>
+                  </div>
+
+                  <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+                    Helping manufacturers and modern enterprises digitize operations end-to-end. Specialized in mission-critical architectures: <b>ERP • MES • QMS • WMS • CMMS</b>, bespoke cloud platforms, and conversion-engineered digital brand experiences.
                   </p>
-                  <div className="team-card-buttons">
-                    <span className="team-card-link">Message on WhatsApp &rarr;</span>
+
+                  <div className="flex items-center gap-2 flex-wrap pt-2">
+                    {["Manufacturing Software", "ERP • MES • QMS", "WMS • CMMS", "Digital Operations"].map((skill, i) => (
+                      <span
+                        key={i}
+                        className="text-xs font-medium text-white/70 bg-white/5 border border-white/10 px-3 py-1 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="pt-3">
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#1868e8] to-[#00f0ff] hover:scale-105 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300"
+                    >
+                      <span>Connect with Sunil</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
-
-              <div
-                className="team-card fade-block"
-                onClick={() => setContactOpen(true)}
-              >
-                <div className="team-photo-wrap">
-                  <Image
-                    src="/assets/sarah-chen.jpg"
-                    alt="Sarah Chen"
-                    width={400}
-                    height={400}
-                    className="team-photo"
-                  />
-                </div>
-                <div className="team-card-overlay">
-                  <span className="team-role">Co-Founder &amp; Design Director</span>
-                  <h3 className="team-name">Sarah Chen</h3>
-                  <p className="team-bio">
-                    Leads creative direction, brand systems, and UI/UX
-                    engineering from initial concept to high-converting launch.
-                  </p>
-                  <div className="team-card-buttons">
-                    <span className="team-card-link">Message on WhatsApp &rarr;</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </section>
 
-        {/* SCREEN 6: FOOTER & CONTACT */}
-        <footer
-          className="screen screen--footer"
-          data-screen
-          data-weight="1"
-          id="contact"
-        >
-          <div className="screen-inner">
-            <div className="footer-grid !grid-cols-2 !max-w-2xl">
-              <div className="footer-block fade-block">
-                <span className="ts-eyebrown">Email</span>
-                <a
-                  href="mailto:hello@dayonebrand.com"
-                  className="ts-p footer-email"
-                >
+        {/* SCREEN 6: FOOTER */}
+        <section className="relative w-full min-h-[50vh] py-16 flex items-center justify-center overflow-hidden bg-[#080911] border-t border-white/5" id="contact">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            variants={staggerContainer}
+            className="relative z-10 w-full max-w-[80rem] px-4 sm:px-12 mx-auto flex flex-col items-center"
+          >
+            <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full text-center md:text-left mb-24">
+              <div>
+                <span className="text-sm font-bold uppercase tracking-[0.2em] text-white/40 block mb-6">Email</span>
+                <a href="mailto:hello@dayonebrand.com" className="text-xl md:text-2xl font-medium hover:text-[#00f0ff] transition-colors block mb-2">
                   hello@dayonebrand.com
                 </a>
-                <a
-                  href="mailto:contact@dayonebrand.com"
-                  className="ts-p footer-email"
-                >
-                  contact@dayonebrand.com
-                </a>
               </div>
-
-              <div className="footer-block fade-block">
-                <span className="ts-eyebrown">Location</span>
-                <a href="#" className="ts-p footer-address">
-                  <svg
-                    className="footer-address-icon"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10 18s6-5.5 6-10.2A6 6 0 0 0 4 7.8C4 12.5 10 18 10 18Z"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinejoin="round"
-                    />
-                    <circle
-                      cx="10"
-                      cy="7.8"
-                      r="2.1"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                    />
-                  </svg>
-                  <span>
-                    Day One Studio
-                    <br />
-                    Level 8, Nexus Tech Tower
-                    <br />
-                    Bandra Kurla Complex, Mumbai 400051
-                  </span>
-                </a>
+              <div>
+                <span className="text-sm font-bold uppercase tracking-[0.2em] text-white/40 block mb-6">Location</span>
+                <p className="text-white/70 text-lg leading-relaxed">
+                  Day One Studio<br />
+                  Level 8, Nexus Tech Tower<br />
+                  Bandra Kurla Complex, Mumbai 400051
+                </p>
               </div>
+            </motion.div>
+
+            <motion.div variants={fadeInUp} className="flex flex-col items-center justify-center mb-16">
+              <div className="relative w-20 h-20 mb-6">
+                <Image
+                  src="/assets/day1-emblem-dark.png"
+                  alt="Day One Emblem"
+                  fill
+                  className="object-contain opacity-80"
+                />
               </div>
+              <span className="text-4xl font-extrabold tracking-tight mb-2">Day One</span>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/50">
+                Foundation First. Growth Follows.
+              </span>
+            </motion.div>
 
-              <div className="flex items-center justify-center mt-10 mb-4 fade-block">
-                <div style={{ position: "relative", width: "4rem", height: "4rem", flexShrink: 0 }}>
-                  <Image
-                    src="/assets/day1-emblem-dark.png"
-                    alt="Day One Emblem"
-                    width={64}
-                    height={64}
-                    style={{ objectFit: "contain", width: "100%", height: "100%" }}
-                    loading="lazy"
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    marginLeft: "1rem",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: "var(--font-heading)",
-                      fontWeight: 600,
-                      fontSize: "1.75rem",
-                      letterSpacing: "-0.02em",
-                      color: "#fff",
-                      lineHeight: 1,
-                      marginBottom: "0.25rem",
-                    }}
-                  >
-                    Day One
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontWeight: 500,
-                      fontSize: "0.65rem",
-                      letterSpacing: "0.15em",
-                      color: "rgba(255, 255, 255, 0.6)",
-                      textTransform: "uppercase",
-                      lineHeight: 1,
-                    }}
-                  >
-                    FOUNDATION FIRST. GROWTH FOLLOWS.
-                  </span>
-                </div>
+            <motion.div variants={fadeInUp} className="w-full pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40">
+              <span>© 2026 Day One. All rights reserved.</span>
+              <div className="flex gap-6">
+                <a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="/terms-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</a>
               </div>
+            </motion.div>
+          </motion.div>
+        </section>
+      </div>
 
-              <div className="footer-bottom fade-block">
-                <span>
-                  © 2026 Day One. All rights reserved. Designed and Developed by Day One.
-                </span>
-                <div className="menu-footer-links">
-                  <a href="/privacy-policy">Privacy Policy</a>
-                  <a href="/terms-conditions">Terms &amp; Conditions</a>
-                </div>
-              </div>
-            </div>
-          </footer>
-        </div>
+      <FloatActions onOpenContact={() => setContactOpen(true)} />
+      <ChatAssistant
+        onOpenContact={() => setContactOpen(true)}
+        onNavigate={goToSection}
+      />
+      <ContactModal
+        isOpen={contactOpen}
+        onClose={() => setContactOpen(false)}
+      />
+      <LeadPopup />
+    </>
+  );
+}
 
-        {/* Progress Dots */}
-        <div className="progress-dots" id="progressDots">
-          {SCREENS.map((s, idx) => (
-            <div
-              key={s.id}
-              className={`dot ${idx === activeIndex ? "is-active" : ""}`}
-              onClick={() => goToSection(s.id)}
-            />
-          ))}
-        </div>
-
-        <FloatActions onOpenContact={() => setContactOpen(true)} />
-        <ChatAssistant
-          onOpenContact={() => setContactOpen(true)}
-          onNavigate={goToSection}
-        />
-        <ContactModal
-          isOpen={contactOpen}
-          onClose={() => setContactOpen(false)}
-        />
-        <LeadPopup />
-      </>
-    );
-  }
