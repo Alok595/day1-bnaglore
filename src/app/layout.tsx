@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   description:
     "Day One is the single team behind your website, software and growth marketing. Web design, custom software, SEO and digital marketing — one team, one point of accountability, from idea to launch.",
   icons: {
-    icon: "/assets/day1-emblem-dark.png",
-    shortcut: "/assets/day1-emblem-dark.png",
-    apple: "/assets/day1-emblem-dark.png",
+    icon: "/assets/d1-new-emblem.png",
+    shortcut: "/assets/d1-new-emblem.png",
+    apple: "/assets/d1-new-emblem.png",
   },
   openGraph: {
     type: "website",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
       "The single team behind your website, software and growth marketing. Web design, custom software, SEO and digital marketing — one team, one point of accountability.",
     images: [
       {
-        url: "/assets/day1-emblem-dark.png",
+        url: "/assets/d1-new-emblem.png",
         width: 928,
         height: 928,
         alt: "Day One",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "Day One — Foundation First. Growth Follows.",
     description:
       "The single team behind your website, software and growth marketing. Web design, custom software, SEO and digital marketing — one team, one point of accountability.",
-    images: ["/assets/day1-emblem-dark.png"],
+    images: ["/assets/d1-new-emblem.png"],
   },
 };
 

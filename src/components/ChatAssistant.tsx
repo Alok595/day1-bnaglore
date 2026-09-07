@@ -624,19 +624,85 @@ export default function ChatAssistant({
           "people",
           "sunil",
           "sunil shetty",
+          "mahima",
+          "mahima shetty",
+          "sinchana",
+          "sinchana shetty",
+          "creator",
+          "storyteller",
+          "video editor",
+          "filmmaker",
+          "video editing",
+          "film making",
           "zero to one",
           "who is founder",
         ],
         reply: () => ({
           html:
-            "<b>Leadership at Day One:</b><br/><br/>" +
-            "<b>Sunil Shetty (He/Him)</b> — <i>Founder &amp; Systems Architect</i><br/>" +
+            "<b>Leadership & Core Team at Day One:</b><br/><br/>" +
+            "• <b>Sunil Shetty (He/Him)</b> — <i>Founder &amp; Systems Architect</i><br/>" +
             "Building <b>ZERO TO ONE BRAND</b>. Sunil leads technical strategy, bespoke enterprise architectures, and manufacturing software systems (<b>ERP • MES • QMS • WMS • CMMS</b>).<br/><br/>" +
-            "You collaborate directly with the founder — zero junior handoffs or misaligned communication.",
+            "• <b>Mahima Shetty (She/Her)</b> — <i>Video Editor &amp; Filmmaker (6 Years Exp)</i><br/>" +
+            "Specialized in cinematic filmmaking, high-impact post-production, color grading, and commercial video storytelling.<br/><br/>" +
+            "• <b>Sinchana Shetty (She/Her)</b> — <i>Creative Storyteller &amp; In-House Creator</i><br/>" +
+            "Spearheaded 50+ successful brand collaborations, crafting scroll-stopping reels, campaign visuals, and high-engagement social media media.<br/><br/>" +
+            "Direct collaboration with domain masters — zero junior handoffs.",
           quickReplies: [
-            { label: "Message Sunil on WhatsApp", intentId: "contact" },
-            { label: "Jump to Leadership Section", intentId: "__goto_team" },
-            { label: "Manufacturing Software", intentId: "manufacturing" },
+            { label: "Connect with Sunil", intentId: "contact" },
+            { label: "Connect with Mahima", intentId: "contact" },
+            { label: "Connect with Sinchana", intentId: "contact" },
+            { label: "Jump to Team Section", intentId: "__goto_team" },
+          ],
+        }),
+      },
+      {
+        id: "creative_storytelling",
+        keywords: [
+          "sinchana",
+          "storyteller",
+          "storytelling",
+          "creator",
+          "collaborations",
+          "collabs",
+          "influencer",
+          "social media",
+          "reels",
+          "content creator",
+        ],
+        reply: () => ({
+          html:
+            "<b>Creative Storytelling &amp; Digital Media at Day One:</b><br/><br/>" +
+            "Led by <b>Sinchana Shetty</b> (Creative Storyteller &amp; In-House Creator).<br/><br/>" +
+            "With <b>50+ successful brand collaborations</b>, Sinchana bridges creative intuition with deep audience insights to produce scroll-stopping social content, brand campaigns, and high-conversion visual narratives.",
+          quickReplies: [
+            { label: "Connect with Sinchana (WhatsApp)", intentId: "contact" },
+            { label: "View Team Section", intentId: "__goto_team" },
+            { label: "Selected Work", intentId: "work" },
+          ],
+        }),
+      },
+      {
+        id: "video_editing",
+        keywords: [
+          "video",
+          "video editing",
+          "videos",
+          "film",
+          "filmmaking",
+          "film making",
+          "commercials",
+          "color grading",
+          "post production",
+        ],
+        reply: () => ({
+          html:
+            "<b>Video Production &amp; Film Making at Day One:</b><br/><br/>" +
+            "Led by <b>Mahima Shetty</b> (6 Years Experience in filmmaking &amp; video editing).<br/><br/>" +
+            "We produce high-caliber cinematic brand films, commercial reels, product showcases, and conversion-focused video campaigns with industry-standard color grading and visual motion.",
+          quickReplies: [
+            { label: "Connect with Mahima (WhatsApp)", intentId: "contact" },
+            { label: "View Team Section", intentId: "__goto_team" },
+            { label: "All Services", intentId: "services" },
           ],
         }),
       },
@@ -1153,7 +1219,7 @@ export default function ChatAssistant({
           <div className="flex items-center gap-3">
             <div className="relative w-10 h-10 rounded-full border border-[#00f0ff]/30 overflow-hidden flex-shrink-0 bg-[#0c0a1b] p-1.5 flex items-center justify-center">
               <Image
-                src="/assets/day1-emblem-dark.png"
+                src="/assets/d1-new-emblem.png"
                 alt="Day One"
                 width={36}
                 height={36}

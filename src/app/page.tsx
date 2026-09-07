@@ -229,74 +229,205 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: "-10%" }}
             variants={staggerContainer}
-            className="relative z-10 w-full max-w-5xl px-4 sm:px-8 mx-auto text-center"
+            className="relative z-10 w-full max-w-7xl px-4 sm:px-8 mx-auto text-center"
           >
             <motion.span variants={fadeInUp} className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[#00f0ff] block mb-4">
-              Leadership
+              Leadership &amp; Team
             </motion.span>
             <motion.h2 variants={fadeInUp} className="text-4xl md:text-5xl font-extrabold mb-14 text-white tracking-tight">
-              The mind behind <i className="text-white/70">the craft</i>.
+              The minds behind <i className="text-white/70">the craft</i>.
             </motion.h2>
 
-            <motion.div variants={fadeInUp} className="w-full">
+            <motion.div variants={fadeInUp} className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {/* Card 1: Sunil Shetty */}
               <div
-                className="group relative rounded-3xl sm:rounded-[2.5rem] bg-gradient-to-b from-[#14132b]/80 via-[#0e0d22]/90 to-[#0c0a1b]/95 border border-white/10 backdrop-blur-2xl p-6 sm:p-10 shadow-2xl overflow-hidden text-left flex flex-col md:flex-row gap-8 lg:gap-12 items-center cursor-pointer transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_40px_rgba(0,240,255,0.15)]"
+                className="group relative rounded-3xl bg-gradient-to-b from-[#14132b]/80 via-[#0e0d22]/90 to-[#0c0a1b]/95 border border-white/10 backdrop-blur-2xl p-6 shadow-2xl overflow-hidden text-left flex flex-col cursor-pointer transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_40px_rgba(0,240,255,0.15)] hover:-translate-y-1.5"
                 onClick={() => setContactOpen(true)}
               >
                 {/* Ambient glow */}
-                <div className="absolute top-0 right-0 w-80 h-80 bg-[#7672ff]/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#00f0ff]/5 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-48 h-48 bg-[#00f0ff]/10 rounded-full blur-3xl pointer-events-none" />
 
-                {/* Founder Photo */}
-                <div className="w-full md:w-72 sm:w-80 aspect-[4/5] relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/15 shrink-0 shadow-lg">
+                {/* Photo */}
+                <div className="w-full aspect-[4/4.5] relative rounded-2xl overflow-hidden border border-white/15 shrink-0 shadow-lg mb-5">
                   <Image
                     src="/assets/1772094173539.jpg"
                     alt="Sunil Shetty"
                     fill
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a1b]/80 via-transparent to-transparent" />
-                </div>
-
-                {/* Founder Bio & Expertise */}
-                <div className="flex flex-col gap-4 flex-1">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#00f0ff] bg-[#00f0ff]/10 border border-[#00f0ff]/30 px-3.5 py-1 rounded-full">
-                      Founder &amp; Systems Architect
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a1b]/90 via-[#0c0a1b]/20 to-transparent" />
+                  
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00f0ff] bg-[#0c0a1b]/90 border border-[#00f0ff]/30 px-2.5 py-1 rounded-full backdrop-blur-md">
+                      Founder &amp; Architect
                     </span>
-                    <span className="text-xs font-sans text-white/50 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
+                    <span className="text-[10px] font-sans text-white/60 bg-[#0c0a1b]/80 px-2 py-0.5 rounded-full border border-white/10 backdrop-blur-md">
                       He/Him
                     </span>
                   </div>
+                </div>
 
+                {/* Bio & Details */}
+                <div className="flex flex-col gap-3 flex-1">
                   <div>
-                    <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight group-hover:text-[#00f0ff] transition-colors">
+                    <h3 className="text-2xl font-extrabold text-white tracking-tight group-hover:text-[#00f0ff] transition-colors">
                       Sunil Shetty
                     </h3>
-                   
                   </div>
 
-                  <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+                  <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
                     Helping manufacturers and modern enterprises digitize operations end-to-end. Specialized in mission-critical architectures: <b>ERP • MES • QMS • WMS • CMMS</b>, bespoke cloud platforms, and conversion-engineered digital brand experiences.
                   </p>
 
-                  <div className="flex items-center gap-2 flex-wrap pt-2">
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
                     {["Manufacturing Software", "ERP • MES • QMS", "WMS • CMMS", "Digital Operations"].map((skill, i) => (
                       <span
                         key={i}
-                        className="text-xs font-medium text-white/70 bg-white/5 border border-white/10 px-3 py-1 rounded-full"
+                        className="text-[10px] font-medium text-white/70 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
 
-                  <div className="pt-3">
+                  <div className="pt-4 mt-auto">
                     <button
                       type="button"
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#1868e8] to-[#00f0ff] hover:scale-105 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300"
+                      className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#1868e8] to-[#00f0ff] hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300"
                     >
                       <span>Connect with Sunil</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Mahima Shetty */}
+              <div
+                className="group relative rounded-3xl bg-gradient-to-b from-[#14132b]/80 via-[#0e0d22]/90 to-[#0c0a1b]/95 border border-white/10 backdrop-blur-2xl p-6 shadow-2xl overflow-hidden text-left flex flex-col cursor-pointer transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_40px_rgba(244,63,94,0.15)] hover:-translate-y-1.5"
+                onClick={() => setContactOpen(true)}
+              >
+                {/* Ambient glow */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-[#ec4899]/10 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Photo */}
+                <div className="w-full aspect-[4/4.5] relative rounded-2xl overflow-hidden border border-white/15 shrink-0 shadow-lg mb-5">
+                  <Image
+                    src="/assets/mahima-shetty.jpeg"
+                    alt="Mahima Shetty"
+                    fill
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a1b]/90 via-[#0c0a1b]/20 to-transparent" />
+
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#ec4899] bg-[#0c0a1b]/90 border border-[#ec4899]/30 px-2.5 py-1 rounded-full backdrop-blur-md">
+                      Video Editor &amp; Filmmaker
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-[#00f0ff] bg-[#0c0a1b]/90 border border-[#00f0ff]/30 px-2 py-0.5 rounded-full backdrop-blur-md">
+                      6 Yrs Exp
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bio & Details */}
+                <div className="flex flex-col gap-3 flex-1">
+                  <div>
+                    <h3 className="text-2xl font-extrabold text-white tracking-tight group-hover:text-[#ec4899] transition-colors">
+                      Mahima Shetty
+                    </h3>
+                  </div>
+
+                  <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
+                    6 years of industry experience in filmmaking, cinematic editing, and high-impact visual storytelling. Crafting brand films, commercial reels, and creative video content engineered to capture attention and convert audiences.
+                  </p>
+
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                    {["Film Making", "Video Editing", "Color Grading", "Post-Production", "Motion Storytelling"].map((skill, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-medium text-white/70 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="pt-4 mt-auto">
+                    <button
+                      type="button"
+                      className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#e11d48] to-[#ec4899] hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] transition-all duration-300"
+                    >
+                      <span>Connect with Mahima</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: Sinchana Shetty */}
+              <div
+                className="group relative rounded-3xl bg-gradient-to-b from-[#14132b]/80 via-[#0e0d22]/90 to-[#0c0a1b]/95 border border-white/10 backdrop-blur-2xl p-6 shadow-2xl overflow-hidden text-left flex flex-col cursor-pointer transition-all duration-300 hover:border-white/20 hover:shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:-translate-y-1.5"
+                onClick={() => setContactOpen(true)}
+              >
+                {/* Ambient glow */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-[#a855f7]/10 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Photo */}
+                <div className="w-full aspect-[4/4.5] relative rounded-2xl overflow-hidden border border-white/15 shrink-0 shadow-lg mb-5">
+                  <Image
+                    src="/assets/sinchana-shetty.jpeg"
+                    alt="Sinchana Shetty"
+                    fill
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a1b]/90 via-[#0c0a1b]/20 to-transparent" />
+
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#c084fc] bg-[#0c0a1b]/90 border border-[#c084fc]/30 px-2.5 py-1 rounded-full backdrop-blur-md">
+                      Creative Storyteller
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-[#f59e0b] bg-[#0c0a1b]/90 border border-[#f59e0b]/30 px-2 py-0.5 rounded-full backdrop-blur-md">
+                      50+ Collabs
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bio & Details */}
+                <div className="flex flex-col gap-3 flex-1">
+                  <div>
+                    <h3 className="text-2xl font-extrabold text-white tracking-tight group-hover:text-[#c084fc] transition-colors">
+                      Sinchana Shetty
+                    </h3>
+                  </div>
+
+                  <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
+                    The creative force behind our brand’s digital media. Having spearheaded 50+ successful brand collaborations, she bridges creative intuition with audience insight to produce scroll-stopping reels, campaign visuals, and impactful social content.
+                  </p>
+
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                    {["Brand Collaborations", "Digital Media", "Creative Storytelling", "Social Campaigns", "Audience Growth"].map((skill, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-medium text-white/70 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="pt-4 mt-auto">
+                    <button
+                      type="button"
+                      className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#9333ea] to-[#c084fc] hover:shadow-[0_0_20px_rgba(192,132,252,0.4)] transition-all duration-300"
+                    >
+                      <span>Connect with Sinchana</span>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12" />
                         <polyline points="12 5 19 12 12 19" />
@@ -338,10 +469,10 @@ export default function Home() {
             <motion.div variants={fadeInUp} className="flex flex-col items-center justify-center mb-16">
               <div className="relative w-20 h-20 mb-6">
                 <Image
-                  src="/assets/day1-emblem-dark.png"
+                  src="/assets/d1-new-emblem.png"
                   alt="Day One Emblem"
                   fill
-                  className="object-contain opacity-80"
+                  className="object-contain opacity-90"
                 />
               </div>
               <span className="text-4xl font-extrabold tracking-tight mb-2">Day One</span>

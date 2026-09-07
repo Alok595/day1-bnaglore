@@ -74,9 +74,9 @@ export default function Header({ onOpenContact, onNavigate }: HeaderProps) {
             }
           }}
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/[0.04] border border-white/10 p-1.5 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:border-[#00f0ff]/40">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
             <Image
-              src="/assets/day1-emblem-dark.png"
+              src="/assets/d1-new-emblem.png"
               alt="Day One"
               width={36}
               height={36}
