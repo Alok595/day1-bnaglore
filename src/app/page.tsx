@@ -449,11 +449,25 @@ export default function Home() {
             variants={staggerContainer}
             className="relative z-10 w-full max-w-[80rem] px-4 sm:px-12 mx-auto flex flex-col items-center"
           >
-            <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full text-center md:text-left mb-24">
+            <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full text-center md:text-left mb-24">
               <div>
                 <span className="text-sm font-bold uppercase tracking-[0.2em] text-white/40 block mb-6">Email</span>
                 <a href="mailto:hello@dayonebrand.com" className="text-xl md:text-2xl font-medium hover:text-[#00f0ff] transition-colors block mb-2">
                   hello@dayonebrand.com
+                </a>
+              </div>
+              <div>
+                <span className="text-sm font-bold uppercase tracking-[0.2em] text-white/40 block mb-6">Phone / WhatsApp</span>
+                <a href="tel:+919322982085" className="text-xl md:text-2xl font-medium hover:text-[#00f0ff] transition-colors block mb-2">
+                  +91 93229 82085
+                </a>
+                <a
+                  href="https://wa.me/919322982085?text=Hi%2C%20I'd%20like%20to%20discuss%20a%20project%20with%20Day%20One."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#25D366] hover:text-[#20ba5a] inline-flex items-center gap-1.5 font-medium transition-colors"
+                >
+                  <span>Chat on WhatsApp</span> &rarr;
                 </a>
               </div>
               <div>

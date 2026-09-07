@@ -112,7 +112,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href="https://wa.me/?text=Hi%20Sunil%2C%20I'd%20like%20to%20discuss%20a%20project%20with%20Day%20One."
+                href="https://wa.me/919322982085?text=Hi%20Sunil%2C%20I'd%20like%20to%20discuss%20a%20project%20with%20Day%20One."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 no-underline bg-[#25D366] hover:bg-[#128C7E] hover:scale-105 hover:shadow-[0_4px_12px_rgba(37,211,102,0.3)] text-white"
@@ -172,7 +172,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href="https://wa.me/?text=Hi%20Mahima%2C%20I'd%20like%20to%20discuss%20video%20production%20and%20editing%20with%20Day%20One."
+                href="https://wa.me/919322982085?text=Hi%20Mahima%2C%20I'd%20like%20to%20discuss%20video%20production%20and%20editing%20with%20Day%20One."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 no-underline bg-[#25D366] hover:bg-[#128C7E] hover:scale-105 hover:shadow-[0_4px_12px_rgba(37,211,102,0.3)] text-white"
@@ -232,7 +232,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href="https://wa.me/?text=Hi%20Sinchana%2C%20I'd%20like%20to%20discuss%20creative%20storytelling%20and%20brand%20collaborations%20with%20Day%20One."
+                href="https://wa.me/919322982085?text=Hi%20Sinchana%2C%20I'd%20like%20to%20discuss%20creative%20storytelling%20and%20brand%20collaborations%20with%20Day%20One."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 no-underline bg-[#25D366] hover:bg-[#128C7E] hover:scale-105 hover:shadow-[0_4px_12px_rgba(37,211,102,0.3)] text-white"
@@ -259,6 +259,32 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 <span>WhatsApp</span>
               </a>
             </div>
+          </div>
+        </div>
+
+        {/* Direct Call / Contact Bar */}
+        <div className="mt-4 pt-4 border-t border-[#fcfeea]/10 flex items-center justify-between gap-3">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-[#a7a8cf]">Direct Hotline</span>
+            <a href="tel:+919322982085" className="text-sm font-bold text-white hover:text-[#00f0ff] transition-colors">
+              +91 93229 82085
+            </a>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="tel:+919322982085"
+              className="inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 no-underline bg-[#00f0ff]/10 hover:bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff]/30"
+            >
+              Call Now
+            </a>
+            <a
+              href="https://wa.me/919322982085?text=Hi%2C%20I'd%20like%20to%20discuss%20a%20project%20with%20Day%20One."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 no-underline bg-[#25D366]/20 hover:bg-[#25D366]/30 text-[#25D366] border border-[#25D366]/30"
+            >
+              WhatsApp
+            </a>
           </div>
         </div>
       </div>

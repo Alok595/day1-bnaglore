@@ -195,7 +195,9 @@ export default function TermsConditionsPage() {
             <h2 style={{ marginTop: 0 }}>Questions about these terms?</h2>
             <p>
               Email us at{" "}
-              <a href="mailto:hello@dayonebrand.com">hello@dayonebrand.com</a>
+              <a href="mailto:hello@dayonebrand.com">hello@dayonebrand.com</a>{" "}
+              or call / WhatsApp us at{" "}
+              <a href="tel:+919322982085">+91 93229 82085</a>.
             </p>
             <p>
               Or reach out via our{" "}

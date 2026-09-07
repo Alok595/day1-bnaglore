@@ -839,11 +839,13 @@ export default function ChatAssistant({
           return {
             html:
               "<b>Let's build something exceptional together!</b><br/><br/>" +
-              "I've opened our <b>Direct Contact Card</b> on your screen. You can WhatsApp founder <b>Sunil Shetty</b> directly, or reach our studio inbox:<ul>" +
-              "<li><a href='mailto:hello@dayonebrand.com'>hello@dayonebrand.com</a></li>" +
-              "<li><a href='mailto:contact@dayonebrand.com'>contact@dayonebrand.com</a></li>" +
+              "I've opened our <b>Direct Contact Card</b> on your screen. You can call or message founder <b>Sunil Shetty</b> directly, or reach our studio inbox:<ul>" +
+              "<li>📞 <b>Call / WhatsApp:</b> <a href='https://wa.me/919322982085?text=Hi%20Sunil%2C%20I%27d%20like%20to%20discuss%20a%20project%20with%20Day%20One.' target='_blank' rel='noopener noreferrer'><b>+91 93229 82085</b></a></li>" +
+              "<li>✉️ <b>Email:</b> <a href='mailto:hello@dayonebrand.com'>hello@dayonebrand.com</a></li>" +
+              "<li>✉️ <b>Enquiries:</b> <a href='mailto:contact@dayonebrand.com'>contact@dayonebrand.com</a></li>" +
               "</ul>",
             quickReplies: [
+              { label: "WhatsApp Direct", intentId: "contact", url: "https://wa.me/919322982085?text=Hi%20Sunil%2C%20I%27d%20like%20to%20discuss%20a%20project%20with%20Day%20One." },
               { label: "Explore Our Work", intentId: "work" },
               { label: "Check Services", intentId: "services" },
             ],
