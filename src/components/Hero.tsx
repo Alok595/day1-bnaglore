@@ -242,11 +242,27 @@ export default function Hero({ onPrimaryCta, onSecondaryCta }: HeroProps) {
           one studio, one point of accountability, <span className="text-white font-semibold">results you can measure.</span>
         </motion.p>
 
+        {/* Milestone Callout */}
+        <motion.div
+          variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-5 py-2.5 rounded-full bg-white/[0.04] border border-[#00f0ff]/25 backdrop-blur-md text-xs sm:text-sm text-gray-200 mt-7 shadow-[0_0_25px_rgba(0,240,255,0.12)] hover:border-[#00f0ff]/40 transition-colors"
+        >
+          <span className="flex items-center gap-2 font-bold text-[#00f0ff]">
+            <span className="w-2 h-2 rounded-full bg-[#00f0ff] animate-pulse" />
+            <span>300+ Clients</span>
+          </span>
+          <span className="text-white/25 hidden sm:inline">•</span>
+          <span className="text-gray-300 font-medium">
+            <span className="text-[#10b981] font-bold">₹3 Cr+</span> Revenue Generated in Performance Marketing
+          </span>
+        </motion.div>
+
         {/* CTA Buttons */}
         <motion.div
           variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10"
+          className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-8"
         >
           <Magnetic strength={0.3}>
             <button
@@ -275,22 +291,24 @@ export default function Hero({ onPrimaryCta, onSecondaryCta }: HeroProps) {
         <motion.div
           variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex items-center justify-center gap-6 sm:gap-14 mt-16 pt-8 w-full max-w-2xl mx-auto border-t border-white/10"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-14 pt-8 w-full max-w-4xl mx-auto border-t border-white/10"
         >
           {[
-            { value: "15+", label: "Live productions", color: "#00f0ff" },
-            { value: "99.8", label: "Lighthouse standard", color: "#10b981" },
-            { value: "100%", label: "In-house studio", color: "#a855f7" },
+            { value: "300+", label: "Clients Scaled", color: "#00f0ff" },
+            { value: "₹3 Cr+", label: "Performance Marketing Revenue", color: "#10b981" },
+            { value: "15+", label: "Live Productions", color: "#a855f7" },
+            { value: "99.8%", label: "Lighthouse Standard", color: "#38bdf8" },
           ].map((stat, i) => (
             <div
               key={stat.label}
-              className="flex flex-col items-center px-4 sm:px-6"
-              style={i > 0 ? { borderLeft: `1px solid ${LINE}` } : undefined}
+              className={`flex flex-col items-center px-3 sm:px-4 text-center ${
+                i % 2 === 1 ? "border-l border-white/10" : ""
+              } ${i > 0 ? "md:border-l md:border-white/10" : ""}`}
             >
-              <span style={{ color: stat.color, fontVariantNumeric: "tabular-nums" }} className="text-xl sm:text-2xl font-extrabold tracking-tight">
+              <span style={{ color: stat.color, fontVariantNumeric: "tabular-nums" }} className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight">
                 {stat.value}
               </span>
-              <span style={{ color: MUTED }} className="text-[0.72rem] sm:text-xs mt-1 font-medium">
+              <span style={{ color: MUTED }} className="text-[0.72rem] sm:text-xs mt-1.5 font-medium leading-tight max-w-[160px]">
                 {stat.label}
               </span>
             </div>
